@@ -13,15 +13,26 @@ const {init, action, status} = require('./src/ElectronMeet');
 let mainWindow, tray, lastImage;
 
 const addShortcut = () => {
-    const ret = globalShortcut.register('CommandOrControl+Shift+D', () => {
+    const microphoneShortcut = globalShortcut.register('CommandOrControl+Shift+D', () => {
         status((currentStatus) => {
             action(currentStatus.isMicrophoneOn ? 'setMicrophoneOff' : 'setMicrophoneOn');
         });
         return 1;
     });
 
-    if (!ret) {
-        console.log('Enregistrement racourci échoué')
+    if (!microphoneShortcut) {
+        console.log('Unable to register the global microphone shortcut');
+    }
+
+    const cameraShortcut = globalShortcut.register('CommandOrControl+Shift+E', () => {
+        status((currentStatus) => {
+            action(currentStatus.isCameraOn ? 'setCameraOff' : 'setCameraOn');
+        });
+        return 1;
+    });
+
+    if (!cameraShortcut) {
+        console.log('Unable to register the global camera shortcut');
     }
 };
 
